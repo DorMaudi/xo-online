@@ -1,0 +1,3 @@
+
+# opcode dict.
+opcode = {}
