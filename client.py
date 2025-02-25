@@ -15,7 +15,7 @@ if __name__ == '__main__':
         print("unable to connect to the server!")
         exit()
 
-    print("Connected to the server {}, {}.", IP, PORT)
+    print("Connected to the server IP: {}, PORT: {}.".format(IP, PORT))
 
     # start app welcome screen.
     app = QtWidgets.QApplication([])
