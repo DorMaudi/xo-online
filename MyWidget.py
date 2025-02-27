@@ -1,9 +1,14 @@
-import sys
-from PySide6 import QtCore, QtWidgets, QtGui
+from PySide6 import QtCore, QtWidgets
+import hashlib
+import socket
+import struct
+from vendor.opcodes import *
 
 class MyWidget(QtWidgets.QWidget):
-    def __init__(self):
+    def __init__(self, sock: socket.socket):
         super().__init__()
+
+        self.s = sock
 
         self.game_name = QtWidgets.QLabel("XO - Online", alignment=QtCore.Qt.AlignCenter)
         self.id_text = QtWidgets.QLabel("Username:", alignment=QtCore.Qt.AlignCenter)
@@ -28,4 +33,11 @@ class MyWidget(QtWidgets.QWidget):
     @QtCore.Slot()
     def clk(self):
         self.login.setEnabled(False)
-        print("ID: {}, Pass: {}".format(self.id_cont.text(), self.pass_cont.text()))
+        hash_obj = hashlib.sha256()
+        hash_obj.update(self.pass_cont.text().encode('utf-8'))
+        enc_pass = hash_obj.hexdigest()
+        user_name_to_send = self.id_cont.text().encode('utf-8')
+        password_to_send = enc_pass.encode('utf-8')
+        #print("ID: {}, Pass: {}".format(self.id_cont.text(), self.pass_cont.text()))
+        header = struct.pack(">2si", opcode["login"], 1024)
+        self.s.sendall(header)
