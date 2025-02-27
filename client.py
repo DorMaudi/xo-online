@@ -1,7 +1,6 @@
 import socket
 import struct
 import sys
-import random
 from MyWidget import *
 
 IP = "192.168.50.52"
